@@ -2,6 +2,14 @@ name: BuildMate Multi Builder
 on:
   workflow_dispatch:
     inputs:
+      source_name:
+        description: Original uploaded ZIP filename
+        required: false
+        type: string
+      expected_head_sha:
+        description: Source upload commit SHA for traceability
+        required: false
+        type: string
       mode:
         description: '选择运行模式：full 正式编译 / preflight 仅预检'
         required: true
