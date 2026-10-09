@@ -1,95 +1,327 @@
-name: BuildMate Linux Preflight
+name: BuildMate Public Builder
+run-name: "BuildMate ${{ inputs.request_id }}"
+concurrency:
+  group: buildmate-public-builder
+  cancel-in-progress: false
 on:
   workflow_dispatch:
     inputs:
+      request_id:
+        description: Unique task UUID
+        required: true
+        type: string
+      source_path:
+        description: Per-task ZIP path
+        required: true
+        type: string
       expected_source_sha256:
-        description: Expected app.zip SHA-256
+        description: Expected ZIP SHA-256
         required: true
         type: string
       expected_source_bytes:
-        description: Expected app.zip bytes
+        description: Expected ZIP size in bytes
         required: true
         type: string
-      source_name:
-        description: Original source name
-        required: false
-        type: string
-      repair_mode:
-        description: Apply .buildmate/repair-plan.json before static checks
-        required: false
-        default: 'false'
-        type: string
+      mode:
+        description: '选择运行模式：full 正式编译 / preflight 仅预检 / repair AI 修复'
+        required: true
+        default: 'full'
+        type: choice
+        options:
+          - full
+          - preflight
+          - repair
+permissions:
+  contents: write
+  actions: read
 jobs:
-  preflight:
-    runs-on: ubuntu-latest
-    timeout-minutes: 8
+  build:
+    runs-on: macos-15
+    timeout-minutes: 35
     steps:
-      - name: Checkout
+      - name: 1. 读取仓库
         uses: actions/checkout@v4
-      - name: Source fingerprint gate
+        with: { fetch-depth: 0 }
+      - name: 1.5 规范运行模式
+        id: mode
         shell: bash
         run: |
-          set -euo pipefail
-          test -f app.zip || { echo '❌ repo root missing app.zip'; exit 21; }
-          ACTUAL_SHA="$(sha256sum app.zip | awk '{print $1}')"
-          ACTUAL_BYTES="$(wc -c < app.zip | tr -d ' ')"
-          echo "source=${{ inputs.source_name }}"
-          echo "sha256=$ACTUAL_SHA"
-          echo "bytes=$ACTUAL_BYTES"
-          test "$ACTUAL_SHA" = "${{ inputs.expected_source_sha256 }}" || { echo '❌ SHA-256 mismatch'; exit 22; }
-          test "$ACTUAL_BYTES" = "${{ inputs.expected_source_bytes }}" || { echo '❌ byte count mismatch'; exit 23; }
-          unzip -tq app.zip
-      - name: Extract and structural checks
+          MODE='${{ inputs.mode }}'
+          case "$MODE" in
+            full|preflight|repair) ;;
+            *) MODE='full' ;;
+          esac
+          [ -n "$MODE" ] || MODE='full'
+          echo "value=$MODE" >> "$GITHUB_OUTPUT"
+          echo "BuildMate mode: $MODE"
+      - name: 1.6 校验独立任务源码
         shell: bash
+        env:
+          REQUEST_ID: ${{ inputs.request_id }}
+          SOURCE_PATH: ${{ inputs.source_path }}
+          EXPECTED_SHA: ${{ inputs.expected_source_sha256 }}
+          EXPECTED_BYTES: ${{ inputs.expected_source_bytes }}
         run: |
           set -euo pipefail
-          rm -rf src && mkdir src
+          [[ "$REQUEST_ID" =~ ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$ ]] || exit 81
+          [ "$SOURCE_PATH" = "sources/$REQUEST_ID/app.zip" ] || exit 82
+          test -f "$SOURCE_PATH" || exit 83
+          [[ "$EXPECTED_SHA" =~ ^[0-9a-f]{64}$ ]] || exit 84
+          [[ "$EXPECTED_BYTES" =~ ^[0-9]+$ ]] || exit 85
+          ACTUAL_SHA="$(shasum -a 256 "$SOURCE_PATH" | awk '{print $1}')"
+          ACTUAL_BYTES="$(wc -c < "$SOURCE_PATH" | tr -d ' ')"
+          [ "$ACTUAL_SHA" = "$EXPECTED_SHA" ] && [ "$ACTUAL_BYTES" = "$EXPECTED_BYTES" ] || { echo 'Source fingerprint mismatch'; exit 86; }
+          cp "$SOURCE_PATH" app.zip
+      - name: 2. 解压并识别工程
+        id: inspect
+        shell: bash
+        run: |
+          set -e
+          test -f app.zip || { echo '❌ 根目录缺少 app.zip'; exit 1; }
+          rm -rf src .buildmate-work; mkdir -p src .buildmate-work .buildmate
           unzip -q app.zip -d src
-          if [ ! -f src/project.yml ]; then
-            P="$(find src -type f -name project.yml | head -1 || true)"
-            if [ -n "$P" ]; then ROOT="$(dirname "$P")"; mkdir moved; cp -R "$ROOT"/. moved/; rm -rf src; mv moved src; fi
+          ROOT=src
+          if [ ! -f src/Makefile ] && [ ! -f src/project.yml ] && ! find src -maxdepth 1 -type d \( -name '*.xcodeproj' -o -name '*.xcworkspace' \) | grep -q .; then
+            P=$(find src -type f \( -name Makefile -o -name project.yml \) | head -1 || true)
+            [ -z "$P" ] && P=$(find src -type d \( -name '*.xcworkspace' -o -name '*.xcodeproj' \) | head -1 || true)
+            [ -n "$P" ] && ROOT=$(dirname "$P")
+            if [ "$ROOT" != src ]; then mkdir .buildmate-work/root; cp -R "$ROOT"/. .buildmate-work/root/; rm -rf src; mv .buildmate-work/root src; fi
           fi
-          test -f src/project.yml || { echo '❌ project.yml missing'; exit 31; }
-          test -d src/BuildMate || { echo '❌ BuildMate source directory missing'; exit 32; }
-          test -f src/BuildMate/Info.plist || { echo '❌ Info.plist missing'; exit 33; }
-          if [ -f src/scripts/check_release_version.py ]; then (cd src && python3 scripts/check_release_version.py); fi
-      - name: Apply repair plan for AI preflight
-        if: ${{ inputs.repair_mode == 'true' }}
+          if [ -f src/Makefile ] && { [ -f src/control ] || [ -f src/layout/DEBIAN/control ] || grep -q 'THEOS' src/Makefile; }; then TYPE=theos; FILE=Makefile
+          elif [ -f src/project.yml ]; then TYPE=xcodegen; FILE=project.yml
+          elif P=$(find src -maxdepth 1 -type d -name '*.xcworkspace' | head -1) && [ -n "$P" ]; then TYPE=workspace; FILE=$(basename "$P")
+          elif P=$(find src -maxdepth 1 -type d -name '*.xcodeproj' | head -1) && [ -n "$P" ]; then TYPE=xcodeproj; FILE=$(basename "$P")
+          else echo '❌ 无法识别 Theos / project.yml / xcodeproj / xcworkspace'; exit 1; fi
+          echo "type=$TYPE" >> "$GITHUB_OUTPUT"; echo "file=$FILE" >> "$GITHUB_OUTPUT"
+      - name: 3. 应用 AI 精确 Patch
+        if: ${{ steps.mode.outputs.value == 'repair' }}
         shell: bash
         run: |
-          set -euo pipefail
           python3 - <<'PY'
           import json,pathlib
-          plan=pathlib.Path('.buildmate/repair-plan.json')
-          root=pathlib.Path('src')
-          if not plan.exists(): raise SystemExit('❌ repair plan missing')
-          obj=json.loads(plan.read_text())
-          import hashlib
-          current=hashlib.sha256(pathlib.Path('app.zip').read_bytes()).hexdigest()
-          bound=str(obj.get('sourceSHA256') or obj.get('source_sha256') or '').strip().lower()
-          if not bound or bound != current.lower():
-              print('⚠️ stale repair plan isolated: Source SHA mismatch/missing')
-              raise SystemExit(0)
-          patches=obj.get('patches') or []
-          if not patches: raise SystemExit('❌ repair plan has no patches')
-          for p in patches:
-            rel=p.get('path',''); old=p.get('search',''); new=p.get('replace','')
-            f=root/rel
-            if not f.is_file() or not old or len(old)>5000 or len(new)>5000: raise SystemExit('❌ unsafe patch')
+          src=pathlib.Path('src'); p=pathlib.Path('.buildmate/repair-plan.json')
+          if not p.exists(): raise SystemExit('❌ 缺少 repair-plan.json')
+          plan=json.loads(p.read_text()); patches=plan.get('patches') or []
+          allowed=('.swift','.m','.mm','.xm','.x','.h')
+          if plan.get('risk')!='low' or int(plan.get('confidence',0))<80 or not patches or len(patches)>9: raise SystemExit('❌ AI Plan 未通过安全门')
+          for x in patches:
+            rel=(x.get('path') or '').replace('\\','/')
+            if rel.startswith('/') or '..' in rel or not rel.endswith(allowed): raise SystemExit('❌ Patch 路径不安全: '+rel)
+            f=src/rel; old=x.get('search') or ''; new=x.get('replace') or ''
+            if not f.is_file() or not old or len(old)>5000 or len(new)>5000: raise SystemExit('❌ Patch 不安全')
             text=f.read_text(errors='ignore'); n=text.count(old)
-            if n != 1: raise SystemExit(f'❌ patch must hit once, got {n}: {rel}')
-            f.write_text(text.replace(old,new,1))
-          print(f'✅ applied {len(patches)} repair patches for Linux preflight')
+            if n!=1: raise SystemExit(f'❌ Patch 必须精确命中1次，实际{n}: {rel}')
+            f.write_text(text.replace(old,new,1)); print('✅ Patch:',rel)
           PY
-      - name: Static high-frequency bug scan
+      - name: 4A. 准备 Xcode 工程
+        if: ${{ steps.inspect.outputs.type != 'theos' }}
+        id: xcode
+        working-directory: src
+        shell: bash
+        run: |
+          set -e
+          TYPE='${{ steps.inspect.outputs.type }}'; FILE='${{ steps.inspect.outputs.file }}'
+          if [ "$TYPE" = xcodegen ]; then brew install xcodegen >/dev/null; xcodegen generate; FILE=$(find . -maxdepth 1 -name '*.xcodeproj' | head -1); TYPE=xcodeproj; fi
+          if [ "$TYPE" = workspace ]; then LIST=$(xcodebuild -workspace "$FILE" -list -json); SCHEME=$(printf '%s' "$LIST"|python3 -c "import json,sys;d=json.load(sys.stdin);s=d.get('workspace',{}).get('schemes',[]);print(s[0] if s else '')")
+          else LIST=$(xcodebuild -project "$FILE" -list -json); SCHEME=$(printf '%s' "$LIST"|python3 -c "import json,sys;d=json.load(sys.stdin);s=d.get('project',{}).get('schemes',[]);print(s[0] if s else '')"); fi
+          test -n "$SCHEME" || { echo '❌ 找不到 Scheme'; exit 1; }
+          echo "kind=$TYPE" >> "$GITHUB_OUTPUT"; echo "file=$FILE" >> "$GITHUB_OUTPUT"; echo "scheme=$SCHEME" >> "$GITHUB_OUTPUT"
+      - name: 4B. 安装 Theos / DEB 签名依赖
+        if: ${{ steps.inspect.outputs.type == 'theos' && steps.mode.outputs.value != 'preflight' }}
+        shell: bash
+        run: |
+          set -e
+          export THEOS="$HOME/theos"
+          if [ ! -d "$THEOS" ]; then git clone --recursive https://github.com/theos/theos.git "$THEOS"; fi
+
+          # Theos 在最终 dylib 签名阶段需要 ldid。GitHub macOS runner 并不保证预装，
+          # 缺失时源码可编译/链接成功，却会在 “Signing …” 阶段以 Error 127 失败。
+          if ! command -v ldid >/dev/null 2>&1; then
+            echo "ℹ️ 未检测到 ldid，正在通过 Homebrew 安装…"
+            brew install ldid
+          fi
+          command -v ldid >/dev/null 2>&1 || { echo "❌ ldid 安装后仍不可用"; exit 127; }
+          echo "✅ ldid: $(command -v ldid)"
+          ldid -h >/dev/null 2>&1 || true
+
+          echo "THEOS=$THEOS" >> "$GITHUB_ENV"
+      - name: 5A. Xcode 编译
+        if: ${{ steps.inspect.outputs.type != 'theos' && steps.mode.outputs.value != 'preflight' }}
+        id: ipa
+        working-directory: src
+        shell: bash
+        run: |
+          set -o pipefail
+          TYPE='${{ steps.xcode.outputs.kind }}'; FILE='${{ steps.xcode.outputs.file }}'; SCHEME='${{ steps.xcode.outputs.scheme }}'
+          rm -rf build compile.log compile-errors.txt
+          if [ "$TYPE" = workspace ]; then BASE=(xcodebuild -workspace "$FILE" -scheme "$SCHEME"); else BASE=(xcodebuild -project "$FILE" -scheme "$SCHEME"); fi
+          # GitHub Actions 的 bash 默认带 -e；真实编译失败时如果不临时关闭 errexit，
+          # shell 会在 xcodebuild | tee 这一行直接退出，后面的 STATUS 与错误提取根本不会执行。
+          set +e
+          "${BASE[@]}" -configuration Release -sdk iphoneos -derivedDataPath build CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY='' build 2>&1 | tee compile.log
+          STATUS=${PIPESTATUS[0]}
+          set -e
+          if [ "$STATUS" -ne 0 ]; then
+            grep -n -B 2 -A 5 -E 'error:|fatal error:|SwiftCompile|CompileSwift|EmitSwiftModule|Command SwiftCompile failed' compile.log | tail -320 > compile-errors.txt || true
+            if [ ! -s compile-errors.txt ]; then tail -240 compile.log > compile-errors.txt || true; fi
+            exit "$STATUS"
+          fi
+          APP=$(find build/Build/Products -type d -path '*Release-iphoneos/*.app' | head -1 || true); test -n "$APP" || exit 1
+          PLIST="$APP/Info.plist"; EXEC=$(/usr/libexec/PlistBuddy -c 'Print :CFBundleExecutable' "$PLIST" 2>/dev/null || true); test -n "$EXEC" && test -f "$APP/$EXEC" || { echo '❌ 主程序校验失败'; exit 1; }
+          VER=$(/usr/libexec/PlistBuddy -c 'Print :CFBundleShortVersionString' "$PLIST" 2>/dev/null || echo unknown); IPA="${EXEC}-V${VER}.ipa"
+          rm -rf Payload "$IPA"; mkdir Payload; cp -R "$APP" Payload/; zip -qry "$IPA" Payload; unzip -tq "$IPA"; echo "file=$IPA" >> "$GITHUB_OUTPUT"
+      - name: 5B. Theos 编译 DEB
+        if: ${{ steps.inspect.outputs.type == 'theos' && steps.mode.outputs.value != 'preflight' }}
+        id: deb
+        working-directory: src
+        shell: bash
+        run: |
+          set -o pipefail
+          rm -rf packages compile.log compile-errors.txt
+          export THEOS="$HOME/theos"
+          set +e
+          make clean package FINALPACKAGE=1 messages=yes 2>&1 | tee compile.log
+          STATUS=${PIPESTATUS[0]}
+          set -e
+          if [ "$STATUS" -ne 0 ]; then
+            grep -n -B 2 -A 5 -E 'error:|fatal error:|Undefined symbols|ld:|logos|make\[[0-9]+\]: \*\*\*' compile.log | tail -320 > compile-errors.txt || true
+            if [ ! -s compile-errors.txt ]; then tail -240 compile.log > compile-errors.txt || true; fi
+            exit "$STATUS"
+          fi
+          DEB=$(find packages -type f -name '*.deb' | head -1 || true); test -n "$DEB" || { echo '❌ Theos 未生成 DEB'; exit 1; }
+          echo "file=$DEB" >> "$GITHUB_OUTPUT"
+      - name: 6A. 上传 IPA
+        if: ${{ steps.inspect.outputs.type != 'theos' && steps.mode.outputs.value != 'preflight' && success() }}
+        uses: actions/upload-artifact@v4
+        with: { name: 'IPA-${{ github.run_number }}', path: 'src/${{ steps.ipa.outputs.file }}', if-no-files-found: error }
+      - name: 6B. 上传 DEB
+        if: ${{ steps.inspect.outputs.type == 'theos' && steps.mode.outputs.value != 'preflight' && success() }}
+        uses: actions/upload-artifact@v4
+        with: { name: 'DEB-${{ github.run_number }}', path: 'src/${{ steps.deb.outputs.file }}', if-no-files-found: error }
+      - name: 7. 生成真实报告和 AI 上下文
+        if: always()
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import json,os,re,pathlib,datetime
+          typ=os.environ.get('PTYPE',''); source=pathlib.Path('src')
+          errp=source/'compile-errors.txt'; logp=source/'compile.log'
+          extracted=errp.read_text(errors='ignore') if errp.exists() else ''
+          full=logp.read_text(errors='ignore') if logp.exists() else ''
+          text=extracted if extracted.strip() else full[-24000:]
+          ok=os.environ.get('JOB_STATUS')=='success'; lines=[x.strip() for x in text.splitlines() if 'error:' in x.lower() or 'fatal error:' in x.lower()]; sig=(lines[0] if lines else (text.splitlines()[-1] if text else ''))[:1200]
+          mode=os.environ.get('MODE') or 'full'; ipa=os.environ.get('IPA') or ''; deb=os.environ.get('DEB') or ''
+          artifact_kind=('DEB' if deb else ('IPA' if ipa else None)); artifact_name=(deb or ipa or None); artifact_uploaded=bool(ok and mode!='preflight' and artifact_name)
+          report={'runID':int(os.environ.get('RUN_ID','0')),'ok':ok,'phase':mode,'projectType':typ,'projectFile':os.environ.get('PFILE') or None,'scheme':os.environ.get('SCHEME') or None,'displayName':None,'bundleID':None,'version':None,'build':None,'executable':None,'deploymentTarget':None,'ipaName':ipa or None,'debName':deb or None,'errorSignature':sig or None,'diagnosis':(('真实编译失败，已提取 Xcode/Theos 原始 error、命令上下文与相关源码。' if text else '真实编译失败，但本次运行未产生 compile.log；请查看 GitHub Run 原始日志。') if not ok else None),'createdAt':datetime.datetime.utcnow().isoformat()+'Z','warnings':None,'artifactKind':artifact_kind,'artifactName':artifact_name,'artifactUploaded':artifact_uploaded}
+          pathlib.Path('.buildmate').mkdir(exist_ok=True); pathlib.Path('.buildmate/latest-report.json').write_text(json.dumps(report,ensure_ascii=False,indent=2))
+          files=[]; exts=('swift','m','mm','xm','x','h')
+          # 先匹配标准 Xcode/Theos 的 file:line:column: error 诊断。
+          pat=re.compile(r'(?P<path>[^\n:]+?\.(?:'+ '|'.join(exts) +r')):(?P<line>\d+)(?::\d+)?:[^\n]*(?:error:|fatal error:)',re.I)
+          candidates=[]
+          for m in pat.finditer(text): candidates.append((m.group('path').strip(),int(m.group('line'))))
+          # 再从完整 compile.log 补抓，兼容同一轮多条真实编译器错误。
+          full_tail=full[-60000:]
+          for m in pat.finditer(full_tail):
+            pair=(m.group('path').strip(),int(m.group('line')))
+            if pair not in candidates: candidates.append(pair)
+          # 最后兜底：从错误文本出现过的源码文件名定位唯一文件，至少给 AI 源码片段。
+          if not candidates:
+            names=re.findall(r'([A-Za-z0-9_+.-]+\.(?:'+ '|'.join(exts) +r'))', text+'\n'+full_tail, re.I)
+            for name in names:
+              ms=list(source.rglob(pathlib.Path(name).name))
+              if len(ms)==1: candidates.append((str(ms[0]),1))
+          seen=set()
+          for rel,line in candidates:
+            if '/src/' in rel: rel=rel.split('/src/',1)[1]
+            rel=rel.lstrip('./'); f=source/rel
+            if not f.exists():
+              ms=list(source.rglob(pathlib.Path(rel).name)); f=ms[0] if len(ms)==1 else f
+            if f.exists():
+              key=str(f.relative_to(source))
+              if key in seen: continue
+              seen.add(key); arr=f.read_text(errors='ignore').splitlines(); line=max(1,min(line,max(1,len(arr))))
+              # 小文件直接给 AI 全文件，避免把 enum/struct/func 的定义裁掉而误判成“类型不存在”。
+              # 大文件仍以报错行窗口为主，并额外补相关声明的上下文。
+              if len(arr) <= 220:
+                snippet='\n'.join(f'{i+1}: {arr[i]}' for i in range(len(arr)))
+                files.append({'path':key,'line':line,'snippet':snippet,'contextMode':'full-file'})
+              else:
+                a=max(0,line-34); b=min(len(arr),line+33)
+                ranges=[(a,b)]
+                # 从报错行/错误文本里提取常见 Swift/ObjC 符号，向上寻找其声明并补一小段。
+                focus=' '.join([arr[line-1] if arr else '', text[-8000:], full_tail[-8000:]])
+                symbols=[]
+                for sym in re.findall(r'\b[A-Z][A-Za-z0-9_]{2,}\b', focus):
+                  if sym not in symbols: symbols.append(sym)
+                  if len(symbols)>=12: break
+                decl_re_cache={}
+                for sym in symbols:
+                  dr=decl_re_cache.setdefault(sym,re.compile(r'\b(?:enum|struct|class|protocol|typealias)\s+'+re.escape(sym)+r'\b|\b(?:func|let|var)\s+'+re.escape(sym)+r'\b'))
+                  for idx,sline in enumerate(arr):
+                    if dr.search(sline):
+                      ranges.append((max(0,idx-4),min(len(arr),idx+22))); break
+                # 合并重叠区间，限制总量，避免超大 prompt。
+                ranges.sort(); merged=[]
+                for ra,rb in ranges:
+                  if merged and ra <= merged[-1][1]+3: merged[-1]=(merged[-1][0],max(merged[-1][1],rb))
+                  else: merged.append((ra,rb))
+                chunks=[]; used=0
+                for ra,rb in merged:
+                  if used>=180: break
+                  rb=min(rb,ra+(180-used)); chunks.append('\n'.join(f'{i+1}: {arr[i]}' for i in range(ra,rb))); used += rb-ra
+                files.append({'path':key,'line':line,'snippet':'\n... [related declaration context] ...\n'.join(chunks),'contextMode':'focused+declarations'})
+            if len(files)>=5: break
+          # 如果编译失败但仍未定位文件，提供少量 Swift/ObjC/Logos 文件头作为最后修复上下文。
+          if not ok and not files:
+            for f in list(source.rglob('*.swift'))+list(source.rglob('*.xm'))+list(source.rglob('*.m')):
+              if any(part in {'build','DerivedData','.git'} for part in f.parts): continue
+              arr=f.read_text(errors='ignore').splitlines()
+              if not arr: continue
+              files.append({'path':str(f.relative_to(source)),'line':1,'snippet':'\n'.join(f'{i+1}: {arr[i]}' for i in range(min(len(arr),80)))})
+              if len(files)>=3: break
+          pathlib.Path('.buildmate/repair-context.json').write_text(json.dumps({'runID':int(os.environ.get('RUN_ID','0')),'errorSignature':sig or None,'diagnosis':report['diagnosis'],'compileErrors':text[-20000:] if text else None,'files':files,'attempt':None},ensure_ascii=False,indent=2))
+          PY
+        env:
+          JOB_STATUS: ${{ job.status }}
+          RUN_ID: ${{ github.run_id }}
+          MODE: ${{ steps.mode.outputs.value }}
+          PTYPE: ${{ steps.inspect.outputs.type }}
+          PFILE: ${{ steps.inspect.outputs.file }}
+          SCHEME: ${{ steps.xcode.outputs.scheme }}
+          IPA: ${{ steps.ipa.outputs.file }}
+          DEB: ${{ steps.deb.outputs.file }}
+      - name: 8. 保存独立运行报告
+        if: always()
         shell: bash
         run: |
           set -euo pipefail
-          cd src
-          ! grep -R --line-number --include='*.swift' 'ActivityShareSheet(items: shareItems)' BuildMate || { echo '❌ stale ActivityShareSheet regression'; exit 41; }
-          if command -v swiftc >/dev/null 2>&1; then
-            find BuildMate -name '*.swift' -print0 | xargs -0 swiftc -parse
-          else
-            echo 'ℹ️ ubuntu runner has no swiftc; syntax parse skipped'
+          mkdir -p ".buildmate/runs/${{ github.run_id }}"
+          test -f .buildmate/latest-report.json && cp .buildmate/latest-report.json ".buildmate/runs/${{ github.run_id }}/report.json" || true
+          test -f .buildmate/repair-context.json && cp .buildmate/repair-context.json ".buildmate/runs/${{ github.run_id }}/repair-context.json" || true
+          git config user.name 'BuildMate Bot'
+          git config user.email 'buildmate@users.noreply.github.com'
+          git add ".buildmate/runs/${{ github.run_id }}/" || true
+          if ! git diff --cached --quiet; then
+            git commit -m 'BuildMate: report ${{ github.run_id }} [skip ci]'
+            git pull --rebase origin "${{ github.ref_name }}"
+            git push origin "HEAD:${{ github.ref_name }}"
           fi
-          echo '✅ Linux preflight passed; macOS/Xcode may start now.'
+      - name: 8.5 上传报告备份
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: BuildMate-Report-${{ github.run_id }}
+          path: |
+            .buildmate/latest-report.json
+            .buildmate/repair-context.json
+          if-no-files-found: warn
+      - name: 9. 失败日志
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: BuildMate-Compile-Logs-${{ github.run_number }}
+          path: |
+            src/compile.log
+            src/compile-errors.txt
+            .buildmate/repair-context.json
+          if-no-files-found: ignore
