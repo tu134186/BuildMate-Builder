@@ -1,10 +1,19 @@
-name: BuildMate Multi Builder
+name: BuildMate Public Builder
+run-name: "BuildMate ${{ inputs.request_id }}"
 concurrency:
-  group: buildmate-legacy-root-zip
+  group: buildmate-public-builder
   cancel-in-progress: false
 on:
   workflow_dispatch:
     inputs:
+      request_id:
+        description: "Unique dispatch correlation ID"
+        required: true
+        type: string
+      source_path:
+        description: "Immutable per-request source ZIP path"
+        required: true
+        type: string
       mode:
         description: '选择运行模式：full 正式编译 / preflight 仅预检'
         required: true
@@ -52,6 +61,21 @@ jobs:
           [ -n "$MODE" ] || MODE='full'
           echo "value=$MODE" >> "$GITHUB_OUTPUT"
           echo "BuildMate mode: $MODE"
+      - name: 1.6 独立任务源码定位
+        shell: bash
+        env:
+          REQUEST_ID: ${{ inputs.request_id }}
+          SOURCE_PATH: ${{ inputs.source_path }}
+        run: |
+          set -euo pipefail
+          if ! [[ "$REQUEST_ID" =~ ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$ ]]; then
+            echo 'Invalid request ID'; exit 81
+          fi
+          if [ "$SOURCE_PATH" != "sources/$REQUEST_ID/app.zip" ]; then
+            echo 'Source path does not match request ID'; exit 82
+          fi
+          test -f "$SOURCE_PATH" || { echo 'Source file not found'; exit 83; }
+          cp -- "$SOURCE_PATH" app.zip
       - name: 1.7 源码指纹门
         id: source_trace
         shell: bash
@@ -286,9 +310,7 @@ jobs:
               if not arr: continue
               files.append({'path':str(f.relative_to(source)),'line':1,'snippet':'\n'.join(f'{i+1}: {arr[i]}' for i in range(min(len(arr),80)))})
               if len(files)>=3: break
-          # Public repository: never persist source excerpts or compiler logs in Git history.
-          # Preserve the legacy report schema but redact sensitive diagnostic context.
-          pathlib.Path('.buildmate/repair-context.json').write_text(json.dumps({'runID':int(os.environ.get('RUN_ID','0')),'errorSignature':sig or None,'diagnosis':'See GitHub Actions job logs for detailed diagnostics.','compileErrors':None,'files':[],'attempt':None},ensure_ascii=False,indent=2))
+          pathlib.Path('.buildmate/repair-context.json').write_text(json.dumps({'runID':int(os.environ.get('RUN_ID','0')),'errorSignature':sig or None,'diagnosis':report['diagnosis'],'compileErrors':text[-20000:] if text else None,'files':files,'attempt':None},ensure_ascii=False,indent=2))
           PY
         env:
           JOB_STATUS: ${{ job.status }}
@@ -299,27 +321,21 @@ jobs:
           SCHEME: ${{ steps.xcode.outputs.scheme }}
           IPA: ${{ steps.ipa.outputs.file }}
           DEB: ${{ steps.deb.outputs.file }}
-      - name: 8. 保存兼容报告与运行归档
+      - name: 8. 保存本轮独立报告到仓库
         if: always()
         shell: bash
         run: |
           set -euo pipefail
-          RUN_ID="${{ github.run_id }}"
-          mkdir -p ".buildmate/runs/$RUN_ID"
-          for f in latest-report.json repair-context.json source-trace.json; do
-            if [ -f ".buildmate/$f" ]; then
-              cp ".buildmate/$f" ".buildmate/runs/$RUN_ID/$f"
-            fi
-          done
+          mkdir -p ".buildmate/runs/${{ github.run_id }}"
+          cp .buildmate/latest-report.json ".buildmate/runs/${{ github.run_id }}/report.json"
+          cp .buildmate/repair-context.json ".buildmate/runs/${{ github.run_id }}/repair-context.json"
           git config user.name 'BuildMate Bot'
           git config user.email 'buildmate@users.noreply.github.com'
-          git add .buildmate/latest-report.json .buildmate/repair-context.json .buildmate/source-trace.json ".buildmate/runs/$RUN_ID/" || true
-          if ! git diff --cached --quiet; then
-            git commit -m "BuildMate: report $RUN_ID [skip ci]"
-            git pull --rebase origin "${{ github.ref_name }}"
-            git push origin "HEAD:${{ github.ref_name }}"
-          fi
-      - name: 8.5 上传运行报告 Artifact
+          git add ".buildmate/runs/${{ github.run_id }}/report.json" ".buildmate/runs/${{ github.run_id }}/repair-context.json"
+          git commit -m 'BuildMate: per-run report ${{ github.run_id }} [skip ci]'
+          git pull --rebase origin "${{ github.ref_name }}"
+          git push origin "HEAD:${{ github.ref_name }}"
+      - name: 8.5 上传本轮报告备份
         if: always()
         uses: actions/upload-artifact@v4
         with:
@@ -327,7 +343,6 @@ jobs:
           path: |
             .buildmate/latest-report.json
             .buildmate/repair-context.json
-            .buildmate/source-trace.json
           if-no-files-found: warn
       - name: 9. 失败日志
         if: failure()
