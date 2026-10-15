@@ -4,7 +4,7 @@
   "expectedSourceSHA256": "d1de3f8f4b23474d9ede1fad4c64ffd5d71c6229f2e59cc568a16e13a84e1e53",
   "sourceBytes": "258094",
   "expectedSourceBytes": "258094",
-  "checkoutSHA": "0c450d11d086a30ae62d066f3ed140cd90a627a5",
-  "expectedHeadSHA": "0c450d11d086a30ae62d066f3ed140cd90a627a5",
+  "checkoutSHA": "2b768b2833a7e946e853c07ec616f3e730c0b00e",
+  "expectedHeadSHA": "2b768b2833a7e946e853c07ec616f3e730c0b00e",
   "sourceTraceOK": true
 }
