@@ -1,10 +1,10 @@
 {
-  "sourceName": "7.11.9.4.3.2.6-写轮眼-精简设置源码.zip",
-  "sourceSHA256": "3b128399b00acc77c5fa5729be793cf8e32be26fbcc645f89b0f125261e90bf8",
-  "expectedSourceSHA256": "3b128399b00acc77c5fa5729be793cf8e32be26fbcc645f89b0f125261e90bf8",
-  "sourceBytes": "256405",
-  "expectedSourceBytes": "256405",
-  "checkoutSHA": "ff52e523320bfc889f65b5c831ac56b662e75e8f",
-  "expectedHeadSHA": "ff52e523320bfc889f65b5c831ac56b662e75e8f",
+  "sourceName": "7.11.9.4.3.2.8-写轮眼-源码.zip",
+  "sourceSHA256": "d1de3f8f4b23474d9ede1fad4c64ffd5d71c6229f2e59cc568a16e13a84e1e53",
+  "expectedSourceSHA256": "d1de3f8f4b23474d9ede1fad4c64ffd5d71c6229f2e59cc568a16e13a84e1e53",
+  "sourceBytes": "258094",
+  "expectedSourceBytes": "258094",
+  "checkoutSHA": "0c450d11d086a30ae62d066f3ed140cd90a627a5",
+  "expectedHeadSHA": "0c450d11d086a30ae62d066f3ed140cd90a627a5",
   "sourceTraceOK": true
 }

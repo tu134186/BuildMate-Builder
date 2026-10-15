@@ -1,6 +1,6 @@
 {
-  "runID": 38770937049,
-  "errorSignature": "dm.pl: building package `com.tu.recordingsharingan:iphoneos-arm64' in `./packages/com.tu.recordingsharingan_7.11.9.4.3.2.6_iphoneos-arm64.deb'",
+  "runID": 38772735538,
+  "errorSignature": "19:\u001b[1mTweak.xm:3033:35: \u001b[0m\u001b[0;1;31merror: \u001b[0m\u001b[1mproperty 'nextResponder' cannot be found in forward class object 'SBSystemApertureContainerView'\u001b[0m",
   "diagnosis": "See GitHub Actions job logs for detailed diagnostics.",
   "compileErrors": null,
   "files": [],
