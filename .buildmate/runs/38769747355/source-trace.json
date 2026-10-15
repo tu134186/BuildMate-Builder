@@ -1,0 +1,10 @@
+{
+  "sourceName": "7.11.9.4.3.2.7-写轮眼-源码.zip",
+  "sourceSHA256": "a6e2a70395e236bf72c5a3c7208b1ffba8edc17cc279248378f957a95c330b10",
+  "expectedSourceSHA256": "a6e2a70395e236bf72c5a3c7208b1ffba8edc17cc279248378f957a95c330b10",
+  "sourceBytes": "257344",
+  "expectedSourceBytes": "257344",
+  "checkoutSHA": "bc128e8e64da42981fd05de75eb5cbc304c7fe25",
+  "expectedHeadSHA": "bc128e8e64da42981fd05de75eb5cbc304c7fe25",
+  "sourceTraceOK": true
+}

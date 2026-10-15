@@ -1,5 +1,5 @@
 {
-  "runID": 38769301490,
+  "runID": 38769747355,
   "ok": true,
   "phase": "full",
   "projectType": "theos",
@@ -15,7 +15,7 @@
   "debName": "packages/com.tu.recordingsharingan_7.11.9.4.3.2.7_iphoneos-arm64.deb",
   "errorSignature": "dm.pl: building package `com.tu.recordingsharingan:iphoneos-arm64' in `./packages/com.tu.recordingsharingan_7.11.9.4.3.2.7_iphoneos-arm64.deb'",
   "diagnosis": null,
-  "createdAt": "2026-10-15T16:29:45.974069Z",
+  "createdAt": "2026-10-15T16:33:16.881277Z",
   "warnings": null,
   "artifactKind": "DEB",
   "artifactName": "packages/com.tu.recordingsharingan_7.11.9.4.3.2.7_iphoneos-arm64.deb",
@@ -25,7 +25,7 @@
   "expectedSourceSHA256": "a6e2a70395e236bf72c5a3c7208b1ffba8edc17cc279248378f957a95c330b10",
   "sourceBytes": "257344",
   "expectedSourceBytes": "257344",
-  "checkoutSHA": "438ebd81081b486c4a5fd1d02544538bf8923fab",
-  "expectedHeadSHA": "438ebd81081b486c4a5fd1d02544538bf8923fab",
+  "checkoutSHA": "bc128e8e64da42981fd05de75eb5cbc304c7fe25",
+  "expectedHeadSHA": "bc128e8e64da42981fd05de75eb5cbc304c7fe25",
   "sourceTraceOK": true
 }
