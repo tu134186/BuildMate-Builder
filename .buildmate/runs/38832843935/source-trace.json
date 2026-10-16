@@ -1,0 +1,10 @@
+{
+  "sourceName": "V1.1.0-DynamicIsland-Source.zip",
+  "sourceSHA256": "7cf3b740fdd9919f08948dd443ad093573227f0e0e611a249e4193ce3f6448d9",
+  "expectedSourceSHA256": "7cf3b740fdd9919f08948dd443ad093573227f0e0e611a249e4193ce3f6448d9",
+  "sourceBytes": "5521",
+  "expectedSourceBytes": "5521",
+  "checkoutSHA": "4991f2479bb7c5ea651e661c42e758fc73905e99",
+  "expectedHeadSHA": "4991f2479bb7c5ea651e661c42e758fc73905e99",
+  "sourceTraceOK": true
+}
