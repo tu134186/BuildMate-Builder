@@ -1,0 +1,8 @@
+{
+  "runID": 38875881921,
+  "errorSignature": "34:clang++: \u001b[0;1;31merror: \u001b[0m\u001b[1mlinker command failed with exit code 1 (use -v to see invocation)\u001b[0m",
+  "diagnosis": "See GitHub Actions job logs for detailed diagnostics.",
+  "compileErrors": null,
+  "files": [],
+  "attempt": null
+}
