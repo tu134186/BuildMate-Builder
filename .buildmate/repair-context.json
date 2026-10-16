@@ -1,6 +1,6 @@
 {
-  "runID": 38773489581,
-  "errorSignature": "19:\u001b[1mTweak.xm:3033:35: \u001b[0m\u001b[0;1;31merror: \u001b[0m\u001b[1mproperty 'nextResponder' cannot be found in forward class object 'SBSystemApertureContainerView'\u001b[0m",
+  "runID": 38830683439,
+  "errorSignature": "dm.pl: building package `com.islandfx.demo:iphoneos-arm64' in `./packages/com.islandfx.demo_1.0.0_iphoneos-arm64.deb'",
   "diagnosis": "See GitHub Actions job logs for detailed diagnostics.",
   "compileErrors": null,
   "files": [],

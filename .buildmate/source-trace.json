@@ -1,10 +1,10 @@
 {
-  "sourceName": "7.11.9.4.3.2.8-写轮眼-源码.zip",
-  "sourceSHA256": "d1de3f8f4b23474d9ede1fad4c64ffd5d71c6229f2e59cc568a16e13a84e1e53",
-  "expectedSourceSHA256": "d1de3f8f4b23474d9ede1fad4c64ffd5d71c6229f2e59cc568a16e13a84e1e53",
-  "sourceBytes": "258094",
-  "expectedSourceBytes": "258094",
-  "checkoutSHA": "2b768b2833a7e946e853c07ec616f3e730c0b00e",
-  "expectedHeadSHA": "2b768b2833a7e946e853c07ec616f3e730c0b00e",
+  "sourceName": "V1.0.0-DynamicIslandFX-Source.zip",
+  "sourceSHA256": "df5d1ac9d90fc820e0930ac9898a1429434cfd052df0500ba0a3b26e61316a93",
+  "expectedSourceSHA256": "df5d1ac9d90fc820e0930ac9898a1429434cfd052df0500ba0a3b26e61316a93",
+  "sourceBytes": "4581",
+  "expectedSourceBytes": "4581",
+  "checkoutSHA": "52d399712fc6667fd7e50c3f86a894ef70f528f4",
+  "expectedHeadSHA": "52d399712fc6667fd7e50c3f86a894ef70f528f4",
   "sourceTraceOK": true
 }

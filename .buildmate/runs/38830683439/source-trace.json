@@ -1,0 +1,10 @@
+{
+  "sourceName": "V1.0.0-DynamicIslandFX-Source.zip",
+  "sourceSHA256": "df5d1ac9d90fc820e0930ac9898a1429434cfd052df0500ba0a3b26e61316a93",
+  "expectedSourceSHA256": "df5d1ac9d90fc820e0930ac9898a1429434cfd052df0500ba0a3b26e61316a93",
+  "sourceBytes": "4581",
+  "expectedSourceBytes": "4581",
+  "checkoutSHA": "52d399712fc6667fd7e50c3f86a894ef70f528f4",
+  "expectedHeadSHA": "52d399712fc6667fd7e50c3f86a894ef70f528f4",
+  "sourceTraceOK": true
+}
