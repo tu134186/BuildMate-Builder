@@ -1,0 +1,8 @@
+{
+  "runID": 38879112662,
+  "errorSignature": "107-(printf \"\\e[0;3%im==> \\e[1;39m%s…\\e[m\\n\" 4 \"Merging bundle IslandFXPrefs\"); set -o pipefail; (/Applications/Xcode_16.4.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/lipo -arch arm64 /Users/runner/work/BuildMate-Builder/BuildMate-Builder/src/.theos/obj/arm64/IslandFXPrefs.bundle/IslandFXPrefs -arch arm64e /Users/runner/work/BuildMate-Builder/BuildMate-Builder/src/.theos/obj/arm64e/IslandFXPrefs.bundle/IslandFXPrefs -create -output \"/Users/runner/work/BuildMate-Builder/BuildMate-Builder/src/.theos/obj/IslandFXPrefs.bundle/IslandFXPrefs.804c181c.unsigned\")",
+  "diagnosis": "See GitHub Actions job logs for detailed diagnostics.",
+  "compileErrors": null,
+  "files": [],
+  "attempt": null
+}

@@ -1,0 +1,10 @@
+{
+  "sourceName": "05-05-MissingControl-Source.zip",
+  "sourceSHA256": "de044e232f82ee6ec4ccb0553fa1b4988db05c100c6f31c558579e83f41a217a",
+  "expectedSourceSHA256": "de044e232f82ee6ec4ccb0553fa1b4988db05c100c6f31c558579e83f41a217a",
+  "sourceBytes": "6646",
+  "expectedSourceBytes": "6646",
+  "checkoutSHA": "c6fbbcc16081487fa7fad9da27058a88068c318d",
+  "expectedHeadSHA": "c6fbbcc16081487fa7fad9da27058a88068c318d",
+  "sourceTraceOK": true
+}
