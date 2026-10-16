@@ -1,0 +1,10 @@
+{
+  "sourceName": "03-03-UndefinedSymbol-Source.zip",
+  "sourceSHA256": "6f94742933d6a3fb950b0f9059a5696b6d23ffda03b3c3172aceda6307793a9f",
+  "expectedSourceSHA256": "6f94742933d6a3fb950b0f9059a5696b6d23ffda03b3c3172aceda6307793a9f",
+  "sourceBytes": "7039",
+  "expectedSourceBytes": "7039",
+  "checkoutSHA": "590a4f3ce3a1e47a2b8577c7b22771d2e7b8bec2",
+  "expectedHeadSHA": "590a4f3ce3a1e47a2b8577c7b22771d2e7b8bec2",
+  "sourceTraceOK": true
+}
