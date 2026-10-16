@@ -1,5 +1,5 @@
 {
-  "runID": 38835958920,
+  "runID": 38837440405,
   "ok": false,
   "phase": "full",
   "projectType": "theos",
@@ -15,7 +15,7 @@
   "debName": null,
   "errorSignature": "24:clang: \u001b[0;1;31merror: \u001b[0m\u001b[1mlinker command failed with exit code 1 (use -v to see invocation)\u001b[0m",
   "diagnosis": "真实编译失败，已提取 Xcode/Theos 原始 error、命令上下文与相关源码。",
-  "createdAt": "2026-10-16T01:36:18.670652Z",
+  "createdAt": "2026-10-16T01:52:57.202395Z",
   "warnings": null,
   "artifactKind": null,
   "artifactName": null,
@@ -25,7 +25,7 @@
   "expectedSourceSHA256": "7cf3b740fdd9919f08948dd443ad093573227f0e0e611a249e4193ce3f6448d9",
   "sourceBytes": "5521",
   "expectedSourceBytes": "5521",
-  "checkoutSHA": "bc7c02df09bc0e4dd1c4e941453b13c0cf53d7c5",
-  "expectedHeadSHA": "bc7c02df09bc0e4dd1c4e941453b13c0cf53d7c5",
+  "checkoutSHA": "78a1d940f3fddcc9e757fd5dc94214d1f894f902",
+  "expectedHeadSHA": "78a1d940f3fddcc9e757fd5dc94214d1f894f902",
   "sourceTraceOK": true
 }
