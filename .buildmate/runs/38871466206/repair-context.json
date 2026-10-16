@@ -1,0 +1,8 @@
+{
+  "runID": 38871466206,
+  "errorSignature": "dm.pl: building package `com.islandfx.demo:iphoneos-arm64' in `./packages/com.islandfx.demo_1.1.4_iphoneos-arm64.deb'",
+  "diagnosis": "See GitHub Actions job logs for detailed diagnostics.",
+  "compileErrors": null,
+  "files": [],
+  "attempt": null
+}
