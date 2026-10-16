@@ -1,10 +1,10 @@
 {
-  "sourceName": "03-03-UndefinedSymbol-Source.zip",
-  "sourceSHA256": "6f94742933d6a3fb950b0f9059a5696b6d23ffda03b3c3172aceda6307793a9f",
-  "expectedSourceSHA256": "6f94742933d6a3fb950b0f9059a5696b6d23ffda03b3c3172aceda6307793a9f",
-  "sourceBytes": "7039",
-  "expectedSourceBytes": "7039",
-  "checkoutSHA": "590a4f3ce3a1e47a2b8577c7b22771d2e7b8bec2",
-  "expectedHeadSHA": "590a4f3ce3a1e47a2b8577c7b22771d2e7b8bec2",
+  "sourceName": "04-04-MissingFramework-Source.zip",
+  "sourceSHA256": "335b6ee39e28cc2407f1e7d93b954e6009ab1e43ee8a9160c62c7258b1163478",
+  "expectedSourceSHA256": "335b6ee39e28cc2407f1e7d93b954e6009ab1e43ee8a9160c62c7258b1163478",
+  "sourceBytes": "6987",
+  "expectedSourceBytes": "6987",
+  "checkoutSHA": "c405894c44189a34738bbe5683ee4021ad0f0155",
+  "expectedHeadSHA": "c405894c44189a34738bbe5683ee4021ad0f0155",
   "sourceTraceOK": true
 }
