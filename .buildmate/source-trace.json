@@ -1,10 +1,10 @@
 {
-  "sourceName": "05-05-MissingControl-Source.zip",
-  "sourceSHA256": "de044e232f82ee6ec4ccb0553fa1b4988db05c100c6f31c558579e83f41a217a",
-  "expectedSourceSHA256": "de044e232f82ee6ec4ccb0553fa1b4988db05c100c6f31c558579e83f41a217a",
-  "sourceBytes": "6646",
-  "expectedSourceBytes": "6646",
-  "checkoutSHA": "2a31a65116a3a6ca5a11360c26f993c4bee9c815",
-  "expectedHeadSHA": "2a31a65116a3a6ca5a11360c26f993c4bee9c815",
+  "sourceName": "02-02-SyntaxError-Source.zip",
+  "sourceSHA256": "7cbf844a8cef74b1c501c0b80fbbd9ae914472bd9bc85a8224d7e0ffe8a0df10",
+  "expectedSourceSHA256": "7cbf844a8cef74b1c501c0b80fbbd9ae914472bd9bc85a8224d7e0ffe8a0df10",
+  "sourceBytes": "6971",
+  "expectedSourceBytes": "6971",
+  "checkoutSHA": "990243acef5b48510944a896d6695ebf451bc882",
+  "expectedHeadSHA": "990243acef5b48510944a896d6695ebf451bc882",
   "sourceTraceOK": true
 }
