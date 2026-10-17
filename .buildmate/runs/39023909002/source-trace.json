@@ -1,0 +1,10 @@
+{
+  "sourceName": "V2.3.6-CarIdle-Source-Fix2.zip",
+  "sourceSHA256": "cff66330dfcf8c2671d0fcb00cc65dbbe422a05a86eaafcbb8d4a569d33b3428",
+  "expectedSourceSHA256": "cff66330dfcf8c2671d0fcb00cc65dbbe422a05a86eaafcbb8d4a569d33b3428",
+  "sourceBytes": "210516",
+  "expectedSourceBytes": "210516",
+  "checkoutSHA": "ebdcf2803d0db6b7a1dbe58c66e632ef2bf05278",
+  "expectedHeadSHA": "ebdcf2803d0db6b7a1dbe58c66e632ef2bf05278",
+  "sourceTraceOK": true
+}
