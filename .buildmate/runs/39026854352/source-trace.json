@@ -1,0 +1,10 @@
+{
+  "sourceName": "V2.3.6-CarIdle-CleanUI-Source.zip",
+  "sourceSHA256": "d6d0fe2c2483fbef39049776421145a3c2724805bfa76305d3720d346f539633",
+  "expectedSourceSHA256": "d6d0fe2c2483fbef39049776421145a3c2724805bfa76305d3720d346f539633",
+  "sourceBytes": "208119",
+  "expectedSourceBytes": "208119",
+  "checkoutSHA": "17b4ec21637ae0e278445d94c2eebb963e6ac604",
+  "expectedHeadSHA": "17b4ec21637ae0e278445d94c2eebb963e6ac604",
+  "sourceTraceOK": true
+}
