@@ -1,0 +1,10 @@
+{
+  "sourceName": "01-01-MissingHeader-Source.zip",
+  "sourceSHA256": "5d897e171d3becbce267ba87fc8775cc5bae1d56a8191c48680adb783b7230c2",
+  "expectedSourceSHA256": "5d897e171d3becbce267ba87fc8775cc5bae1d56a8191c48680adb783b7230c2",
+  "sourceBytes": "7003",
+  "expectedSourceBytes": "7003",
+  "checkoutSHA": "edc575a4e328463ee4e68be5797fe1e39db1a7ec",
+  "expectedHeadSHA": "edc575a4e328463ee4e68be5797fe1e39db1a7ec",
+  "sourceTraceOK": true
+}

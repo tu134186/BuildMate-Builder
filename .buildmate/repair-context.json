@@ -1,6 +1,6 @@
 {
-  "runID": 38887393792,
-  "errorSignature": "34:clang++: \u001b[0;1;31merror: \u001b[0m\u001b[1mlinker command failed with exit code 1 (use -v to see invocation)\u001b[0m",
+  "runID": 38993108596,
+  "errorSignature": "22:\u001b[1mTweak.xm:1:9: \u001b[0m\u001b[0;1;31mfatal error: \u001b[0m\u001b[1m'BM_TEST_MISSING_HEADER_2026.h' file not found\u001b[0m",
   "diagnosis": "See GitHub Actions job logs for detailed diagnostics.",
   "compileErrors": null,
   "files": [],
