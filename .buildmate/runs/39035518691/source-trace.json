@@ -1,0 +1,10 @@
+{
+  "sourceName": "d02958e7481842fa9e5dc71e57af64dc.zip",
+  "sourceSHA256": "8a58d5d3936c4b23042b00ea895885beee291860ca33ded567999649e166c392",
+  "expectedSourceSHA256": "8a58d5d3936c4b23042b00ea895885beee291860ca33ded567999649e166c392",
+  "sourceBytes": "214932",
+  "expectedSourceBytes": "214932",
+  "checkoutSHA": "452018d40143bd59a972bf0b180333160cfcf606",
+  "expectedHeadSHA": "452018d40143bd59a972bf0b180333160cfcf606",
+  "sourceTraceOK": true
+}
