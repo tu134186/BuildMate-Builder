@@ -1,0 +1,8 @@
+{
+  "runID": 39021804438,
+  "errorSignature": "269:/Users/runner/work/BuildMate-Builder/BuildMate-Builder/src/CarIdle/IdleLiveActivity.swift:26:25: error: 'content' is only available in iOS 16.2 or newer",
+  "diagnosis": "See GitHub Actions job logs for detailed diagnostics.",
+  "compileErrors": null,
+  "files": [],
+  "attempt": null
+}
