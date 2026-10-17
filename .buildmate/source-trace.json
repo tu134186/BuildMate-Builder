@@ -1,10 +1,10 @@
 {
-  "sourceName": "V2.3.5-CarIdle-Source.zip",
-  "sourceSHA256": "18520d9cd1ba02bd92036da4116d1ac735e7f1de5983a225824d35abe4a73884",
-  "expectedSourceSHA256": "18520d9cd1ba02bd92036da4116d1ac735e7f1de5983a225824d35abe4a73884",
-  "sourceBytes": "206377",
-  "expectedSourceBytes": "206377",
-  "checkoutSHA": "a0357fc34fed2583f2a6df744d61b9e9cb2a87bb",
-  "expectedHeadSHA": "a0357fc34fed2583f2a6df744d61b9e9cb2a87bb",
+  "sourceName": "V1.0.0-LiveTimer-Test-Source.zip",
+  "sourceSHA256": "ca1ccd604108ab963a5401b3e0e857c77b5cc36ae22586a878c8c8005792e21d",
+  "expectedSourceSHA256": "ca1ccd604108ab963a5401b3e0e857c77b5cc36ae22586a878c8c8005792e21d",
+  "sourceBytes": "4170",
+  "expectedSourceBytes": "4170",
+  "checkoutSHA": "74de17f8dc167d932cd48c85d46763d80b47499b",
+  "expectedHeadSHA": "74de17f8dc167d932cd48c85d46763d80b47499b",
   "sourceTraceOK": true
 }
