@@ -1,0 +1,10 @@
+{
+  "sourceName": "V2.3.6-CarIdle-Diagnostic-D1-Source.zip",
+  "sourceSHA256": "a12a1dd1bffe347235637c989a08926f9d03e96b815e28bbb0b4f06344acffcc",
+  "expectedSourceSHA256": "a12a1dd1bffe347235637c989a08926f9d03e96b815e28bbb0b4f06344acffcc",
+  "sourceBytes": "208657",
+  "expectedSourceBytes": "208657",
+  "checkoutSHA": "401a8f5e32c8be6e9180c528289cb710737de4f8",
+  "expectedHeadSHA": "401a8f5e32c8be6e9180c528289cb710737de4f8",
+  "sourceTraceOK": true
+}
