@@ -1,10 +1,10 @@
 {
-  "sourceName": "V1.0.0-UIStudioPro-Source.zip",
-  "sourceSHA256": "fdec6f997ceccfdaf1d33645d6764178d619b33bc9171d0dcfcff21420935ee2",
-  "expectedSourceSHA256": "fdec6f997ceccfdaf1d33645d6764178d619b33bc9171d0dcfcff21420935ee2",
-  "sourceBytes": "10437",
-  "expectedSourceBytes": "10437",
-  "checkoutSHA": "206c25579b8256c174e5037d05d764a7234cc68d",
-  "expectedHeadSHA": "206c25579b8256c174e5037d05d764a7234cc68d",
+  "sourceName": "V1.1.0-UIStudioPro-Source.zip",
+  "sourceSHA256": "e5cf623140c9bb6b0b0bd84f93936bcc613045e5f1c99243ce41d3ebddb97287",
+  "expectedSourceSHA256": "e5cf623140c9bb6b0b0bd84f93936bcc613045e5f1c99243ce41d3ebddb97287",
+  "sourceBytes": "9514",
+  "expectedSourceBytes": "9514",
+  "checkoutSHA": "f9a2deba558b0b3239f94aaaad4c9fdf0f0b8161",
+  "expectedHeadSHA": "f9a2deba558b0b3239f94aaaad4c9fdf0f0b8161",
   "sourceTraceOK": true
 }
