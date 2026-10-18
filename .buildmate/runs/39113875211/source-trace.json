@@ -1,0 +1,10 @@
+{
+  "sourceName": "V3.0.0-UIStudioPro-Source.zip",
+  "sourceSHA256": "1d410b62e8c10e244ed2a9e7e8c62731e45c44c1515f77a67407754264846991",
+  "expectedSourceSHA256": "1d410b62e8c10e244ed2a9e7e8c62731e45c44c1515f77a67407754264846991",
+  "sourceBytes": "26793",
+  "expectedSourceBytes": "26793",
+  "checkoutSHA": "f68a7b17490833060270551a88ffa406aa31fb23",
+  "expectedHeadSHA": "f68a7b17490833060270551a88ffa406aa31fb23",
+  "sourceTraceOK": true
+}
