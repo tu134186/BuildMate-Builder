@@ -1,10 +1,10 @@
 {
-  "sourceName": "V4.0.0-UIStudioPro-Source.zip",
-  "sourceSHA256": "2da5b228e25721645c50cdb3df98918ca9c9e7eff49b66836897c8ceb281fb88",
-  "expectedSourceSHA256": "2da5b228e25721645c50cdb3df98918ca9c9e7eff49b66836897c8ceb281fb88",
-  "sourceBytes": "29297",
-  "expectedSourceBytes": "29297",
-  "checkoutSHA": "529e688ef17bee1264923c8b301813255b816c8b",
-  "expectedHeadSHA": "529e688ef17bee1264923c8b301813255b816c8b",
+  "sourceName": "V1.0.0-PhotoPickPro-Source.zip",
+  "sourceSHA256": "b4b9b364af4008e3de4c16d48a21e58375eb4677293496b8af246737cdd09473",
+  "expectedSourceSHA256": "b4b9b364af4008e3de4c16d48a21e58375eb4677293496b8af246737cdd09473",
+  "sourceBytes": "10140",
+  "expectedSourceBytes": "10140",
+  "checkoutSHA": "1c207c76ed007efe9308f25ba16fbe9ffb8c971f",
+  "expectedHeadSHA": "1c207c76ed007efe9308f25ba16fbe9ffb8c971f",
   "sourceTraceOK": true
 }
