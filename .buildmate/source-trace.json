@@ -1,10 +1,10 @@
 {
-  "sourceName": "V2.0.0-PhotoPickPro-Source.zip",
-  "sourceSHA256": "3f391da48beacdedb2e3cb2fbfc9eda33ced430e9e66f7bbc8bd6c59fc10c075",
-  "expectedSourceSHA256": "3f391da48beacdedb2e3cb2fbfc9eda33ced430e9e66f7bbc8bd6c59fc10c075",
-  "sourceBytes": "12482",
-  "expectedSourceBytes": "12482",
-  "checkoutSHA": "fe158b1e20b61c084dcf12e7c562c40dd23a5235",
-  "expectedHeadSHA": "fe158b1e20b61c084dcf12e7c562c40dd23a5235",
+  "sourceName": "V2.3.9-CarIdle-Source.zip",
+  "sourceSHA256": "fe4694c0b09cd3b081596d103f1ad0194d354b3f3689bbcf183624553462f24d",
+  "expectedSourceSHA256": "fe4694c0b09cd3b081596d103f1ad0194d354b3f3689bbcf183624553462f24d",
+  "sourceBytes": "212580",
+  "expectedSourceBytes": "212580",
+  "checkoutSHA": "65d4c969ace81e61e631d2c03d236d5cf1e7ef65",
+  "expectedHeadSHA": "65d4c969ace81e61e631d2c03d236d5cf1e7ef65",
   "sourceTraceOK": true
 }
