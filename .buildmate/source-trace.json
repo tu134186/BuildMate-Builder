@@ -1,10 +1,10 @@
 {
-  "sourceName": "V2.3.9-CarIdle-Source.zip",
-  "sourceSHA256": "fe4694c0b09cd3b081596d103f1ad0194d354b3f3689bbcf183624553462f24d",
-  "expectedSourceSHA256": "fe4694c0b09cd3b081596d103f1ad0194d354b3f3689bbcf183624553462f24d",
-  "sourceBytes": "212580",
-  "expectedSourceBytes": "212580",
-  "checkoutSHA": "65d4c969ace81e61e631d2c03d236d5cf1e7ef65",
-  "expectedHeadSHA": "65d4c969ace81e61e631d2c03d236d5cf1e7ef65",
+  "sourceName": "Unknown.zip",
+  "sourceSHA256": "fd40bc65bf0793a5d3bf8650dcdc1b70b9d50aa3a36b71c34b9384b88b68691a",
+  "expectedSourceSHA256": "fd40bc65bf0793a5d3bf8650dcdc1b70b9d50aa3a36b71c34b9384b88b68691a",
+  "sourceBytes": "261970",
+  "expectedSourceBytes": "261970",
+  "checkoutSHA": "3926112cacca47fa12af3958d34e7775ad3b6827",
+  "expectedHeadSHA": "3926112cacca47fa12af3958d34e7775ad3b6827",
   "sourceTraceOK": true
 }
