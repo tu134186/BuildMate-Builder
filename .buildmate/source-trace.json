@@ -1,10 +1,10 @@
 {
-  "sourceName": "Unknown.zip",
-  "sourceSHA256": "c0d5415d0ff491b479a84d2bc5bde720a4656a6191695e77d985dc086f24336b",
-  "expectedSourceSHA256": "c0d5415d0ff491b479a84d2bc5bde720a4656a6191695e77d985dc086f24336b",
-  "sourceBytes": "257401",
-  "expectedSourceBytes": "257401",
-  "checkoutSHA": "00b35d5fc8941423859ab816554a27f40f9beea8",
-  "expectedHeadSHA": "00b35d5fc8941423859ab816554a27f40f9beea8",
+  "sourceName": "7.11.9.4.3.2.8-%E5%86%99%E8%BD%AE%E7%9C%BC-%E6%BA%90%E7%A0%81.zip",
+  "sourceSHA256": "a3f82cfcad0a8a376d042fcefab87c2545a1fc7bfd7f069e2bab9d25a5449c26",
+  "expectedSourceSHA256": "a3f82cfcad0a8a376d042fcefab87c2545a1fc7bfd7f069e2bab9d25a5449c26",
+  "sourceBytes": "262401",
+  "expectedSourceBytes": "262401",
+  "checkoutSHA": "c3c61e42218e0d6ebf4b2b8af8f98dd9941c52bb",
+  "expectedHeadSHA": "c3c61e42218e0d6ebf4b2b8af8f98dd9941c52bb",
   "sourceTraceOK": true
 }
