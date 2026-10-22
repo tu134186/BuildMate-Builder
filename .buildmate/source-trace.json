@@ -1,10 +1,10 @@
 {
-  "sourceName": "Unknown.zip",
-  "sourceSHA256": "c0d5415d0ff491b479a84d2bc5bde720a4656a6191695e77d985dc086f24336b",
-  "expectedSourceSHA256": "c0d5415d0ff491b479a84d2bc5bde720a4656a6191695e77d985dc086f24336b",
-  "sourceBytes": "257401",
-  "expectedSourceBytes": "257401",
-  "checkoutSHA": "92c6e5d6574ccab8035ec6a8105064e12c2e2f67",
-  "expectedHeadSHA": "92c6e5d6574ccab8035ec6a8105064e12c2e2f67",
+  "sourceName": "V2.2.3-TripAssistant-Source.zip",
+  "sourceSHA256": "aaf80962b26b9026dfd1e1b9c4a6cc78da500b97aaf59ae8878b4c0686a98482",
+  "expectedSourceSHA256": "aaf80962b26b9026dfd1e1b9c4a6cc78da500b97aaf59ae8878b4c0686a98482",
+  "sourceBytes": "87537",
+  "expectedSourceBytes": "87537",
+  "checkoutSHA": "abf11aab351129775d0d78dab2bd1fb64e6e8980",
+  "expectedHeadSHA": "abf11aab351129775d0d78dab2bd1fb64e6e8980",
   "sourceTraceOK": true
 }
