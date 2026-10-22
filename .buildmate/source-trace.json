@@ -1,10 +1,10 @@
 {
-  "sourceName": "7.11.9.4.3.2.8-%E5%86%99%E8%BD%AE%E7%9C%BC-%E6%BA%90%E7%A0%81.zip",
-  "sourceSHA256": "a3f82cfcad0a8a376d042fcefab87c2545a1fc7bfd7f069e2bab9d25a5449c26",
-  "expectedSourceSHA256": "a3f82cfcad0a8a376d042fcefab87c2545a1fc7bfd7f069e2bab9d25a5449c26",
-  "sourceBytes": "262401",
-  "expectedSourceBytes": "262401",
-  "checkoutSHA": "c3c61e42218e0d6ebf4b2b8af8f98dd9941c52bb",
-  "expectedHeadSHA": "c3c61e42218e0d6ebf4b2b8af8f98dd9941c52bb",
+  "sourceName": "V2.2.2-TripAssistant-Source.zip",
+  "sourceSHA256": "fb737c8689021e944a2459c6a074eff2427593638108a4eedaf498d8f0016965",
+  "expectedSourceSHA256": "fb737c8689021e944a2459c6a074eff2427593638108a4eedaf498d8f0016965",
+  "sourceBytes": "29464",
+  "expectedSourceBytes": "29464",
+  "checkoutSHA": "617ef305426245f6ca827f38b4bf272ccfc9c9a5",
+  "expectedHeadSHA": "617ef305426245f6ca827f38b4bf272ccfc9c9a5",
   "sourceTraceOK": true
 }
