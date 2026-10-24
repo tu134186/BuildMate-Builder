@@ -1,6 +1,6 @@
 {
-  "runID": 40063697622,
-  "errorSignature": "81:clang: \u001b[0;1;31merror: \u001b[0m\u001b[1mlinker command failed with exit code 1 (use -v to see invocation)\u001b[0m",
+  "runID": 40063969521,
+  "errorSignature": "dm.pl: building package `com.tu.recordingsharingan:iphoneos-arm64' in `./packages/com.tu.recordingsharingan_7.11.9.4.3.2.6.2_iphoneos-arm64.deb'",
   "diagnosis": "See GitHub Actions job logs for detailed diagnostics.",
   "compileErrors": null,
   "files": [],
