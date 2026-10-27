@@ -1,10 +1,10 @@
 {
-  "sourceName": "V7.11.9.4.3.2.6.4-RecordingSharingan-Source.zip",
-  "sourceSHA256": "7b38750bf2a2bbe7b0fb7399f3040bf09bff8fbda5b7c677a32fe226c863cf3e",
-  "expectedSourceSHA256": "7b38750bf2a2bbe7b0fb7399f3040bf09bff8fbda5b7c677a32fe226c863cf3e",
-  "sourceBytes": "261435",
-  "expectedSourceBytes": "261435",
-  "checkoutSHA": "bcd3c8a33fc4ad8a5b5a8c94d3aa5f893b3cd68e",
-  "expectedHeadSHA": "bcd3c8a33fc4ad8a5b5a8c94d3aa5f893b3cd68e",
+  "sourceName": "7.11.9.4.3.2.6.17-RecordingSharingan-source.zip",
+  "sourceSHA256": "dbae2d9ab6cad942703126a7eabf1dd2bc5cb9df37620cc846c6834fef0e4ae0",
+  "expectedSourceSHA256": "dbae2d9ab6cad942703126a7eabf1dd2bc5cb9df37620cc846c6834fef0e4ae0",
+  "sourceBytes": "263977",
+  "expectedSourceBytes": "263977",
+  "checkoutSHA": "cd24905090b05869a102bbee5ba5515892008783",
+  "expectedHeadSHA": "cd24905090b05869a102bbee5ba5515892008783",
   "sourceTraceOK": true
 }
