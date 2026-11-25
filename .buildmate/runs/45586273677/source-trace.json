@@ -1,0 +1,10 @@
+{
+  "sourceName": "7.11.9.4.3.2.6.21-RecordingSharingan-source.zip",
+  "sourceSHA256": "f31ae0807b6fdb5905d93b70b15f1bf3e524f9ee208276aa4c2f3fa1cb833005",
+  "expectedSourceSHA256": "f31ae0807b6fdb5905d93b70b15f1bf3e524f9ee208276aa4c2f3fa1cb833005",
+  "sourceBytes": "205956",
+  "expectedSourceBytes": "205956",
+  "checkoutSHA": "e1f7ccc05458abfd01bded2a428570c0959bf411",
+  "expectedHeadSHA": "e1f7ccc05458abfd01bded2a428570c0959bf411",
+  "sourceTraceOK": true
+}
